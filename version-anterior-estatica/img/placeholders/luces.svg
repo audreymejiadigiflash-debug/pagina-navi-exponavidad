@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="75%">
+      <stop offset="0" stop-color="#1f4a37"/>
+      <stop offset="1" stop-color="#0f2a1f"/>
+    </radialGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#ffe9a8" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#ffe9a8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="800" fill="url(#bg)"/>
+  <path d="M-20 220 Q200 380 400 260 T820 300" fill="none" stroke="#0a1d15" stroke-width="6"/>
+  <path d="M-20 500 Q200 660 400 540 T820 580" fill="none" stroke="#0a1d15" stroke-width="6"/>
+  <g id="row1">
+    <circle cx="80" cy="300" r="60" fill="url(#glow)"/>
+    <circle cx="220" cy="330" r="60" fill="url(#glow)"/>
+    <circle cx="360" cy="280" r="60" fill="url(#glow)"/>
+    <circle cx="500" cy="240" r="60" fill="url(#glow)"/>
+    <circle cx="640" cy="270" r="60" fill="url(#glow)"/>
+    <circle cx="760" cy="300" r="60" fill="url(#glow)"/>
+  </g>
+  <g fill="#ffd36b">
+    <ellipse cx="80" cy="304" rx="16" ry="26"/><ellipse cx="220" cy="334" rx="16" ry="26"/><ellipse cx="360" cy="284" rx="16" ry="26"/>
+    <ellipse cx="500" cy="244" rx="16" ry="26"/><ellipse cx="640" cy="274" rx="16" ry="26"/><ellipse cx="760" cy="304" rx="16" ry="26"/>
+  </g>
+  <use href="#row1" y="280"/>
+  <g>
+    <ellipse cx="80" cy="584" rx="16" ry="26" fill="#ff6b6b"/><ellipse cx="220" cy="614" rx="16" ry="26" fill="#ffd36b"/>
+    <ellipse cx="360" cy="564" rx="16" ry="26" fill="#6bd1ff"/><ellipse cx="500" cy="524" rx="16" ry="26" fill="#8ff0a4"/>
+    <ellipse cx="640" cy="554" rx="16" ry="26" fill="#ff6b6b"/><ellipse cx="760" cy="584" rx="16" ry="26" fill="#ffd36b"/>
+  </g>
+  <g fill="#0a1d15">
+    <rect x="72" y="270" width="16" height="12" rx="2"/><rect x="212" y="300" width="16" height="12" rx="2"/><rect x="352" y="250" width="16" height="12" rx="2"/>
+    <rect x="492" y="210" width="16" height="12" rx="2"/><rect x="632" y="240" width="16" height="12" rx="2"/><rect x="752" y="270" width="16" height="12" rx="2"/>
+    <rect x="72" y="550" width="16" height="12" rx="2"/><rect x="212" y="580" width="16" height="12" rx="2"/><rect x="352" y="530" width="16" height="12" rx="2"/>
+    <rect x="492" y="490" width="16" height="12" rx="2"/><rect x="632" y="520" width="16" height="12" rx="2"/><rect x="752" y="550" width="16" height="12" rx="2"/>
+  </g>
+</svg>

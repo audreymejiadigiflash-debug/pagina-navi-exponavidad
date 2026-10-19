@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Catálogo | NaviExpoNavidad</title>
+  <meta name="description" content="Explora el catálogo de NaviExpoNavidad: árboles de Navidad, esferas, luces, adornos, coronas y guirnaldas. Filtra por altura, tipo de luz, color y precio.">
+  <meta name="theme-color" content="#173d2d">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="NaviExpoNavidad">
+  <meta property="og:title" content="Catálogo navideño | NaviExpoNavidad">
+  <meta property="og:description" content="Árboles de Navidad, esferas, luces, adornos, coronas y guirnaldas.">
+  <meta property="og:image" content="img/hero.svg">
+  <meta property="og:locale" content="es_MX">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="catalog">
+  <div id="site-header"></div>
+
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <nav class="breadcrumbs" aria-label="Ruta de navegación">
+          <ol>
+            <li><a href="index.html">Inicio</a></li>
+            <li aria-current="page" id="breadcrumb-current">Catálogo</li>
+          </ol>
+        </nav>
+        <h1 id="catalog-title">Todo el catálogo</h1>
+        <p id="catalog-description">Árboles, esferas, luces, adornos y coronas para tu Navidad.</p>
+        <nav class="category-chips" aria-label="Categorías" id="category-chips"></nav>
+      </div>
+    </section>
+
+    <div class="container catalog-layout">
+      <aside class="filters" id="filters" aria-label="Filtros">
+        <form id="filters-form" novalidate>
+          <fieldset class="filter-group" id="filter-categories">
+            <legend>Categoría</legend>
+          </fieldset>
+
+          <div id="filter-attributes"></div>
+
+          <fieldset class="filter-group">
+            <legend>Precio</legend>
+            <div class="price-range">
+              <div class="field">
+                <label for="price-min">Mínimo</label>
+                <input id="price-min" name="min" type="number" inputmode="numeric" min="0" step="1" placeholder="$0">
+              </div>
+              <div class="field">
+                <label for="price-max">Máximo</label>
+                <input id="price-max" name="max" type="number" inputmode="numeric" min="0" step="1" placeholder="Sin límite">
+              </div>
+            </div>
+            <p class="field__error" id="price-error" hidden>El precio mínimo no puede ser mayor que el máximo.</p>
+          </fieldset>
+
+          <fieldset class="filter-group">
+            <legend>Disponibilidad</legend>
+            <label class="check"><input type="checkbox" name="oferta" value="1"> Solo ofertas</label>
+            <label class="check"><input type="checkbox" name="disponible" value="1"> Ocultar agotados</label>
+          </fieldset>
+
+          <div style="display:grid;gap:8px">
+            <button type="button" class="btn btn-primary btn-block filters-toggle" id="filters-apply">Ver resultados</button>
+            <button type="button" class="btn btn-outline btn-block" id="filters-clear">Limpiar filtros</button>
+          </div>
+        </form>
+      </aside>
+
+      <section aria-labelledby="catalog-title">
+        <div class="catalog-toolbar">
+          <p class="catalog-toolbar__count" id="results-count" aria-live="polite"></p>
+          <div class="catalog-toolbar__controls">
+            <button type="button" class="btn btn-outline btn-sm filters-toggle" id="filters-toggle" aria-controls="filters" aria-expanded="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+              Filtros
+            </button>
+            <label class="visually-hidden" for="sort">Ordenar por</label>
+            <select class="select" id="sort">
+              <option value="relevance">Destacados</option>
+              <option value="newest">Más nuevos</option>
+              <option value="price-asc">Precio: menor a mayor</option>
+              <option value="price-desc">Precio: mayor a menor</option>
+              <option value="name">Nombre (A-Z)</option>
+            </select>
+          </div>
+        </div>
+        <div class="product-grid" id="results"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/catalog.js"></script>
+</body>
+</html>

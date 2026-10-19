@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel de productos | NaviExpoNavidad</title>
+  <meta name="description" content="Panel para administrar los productos de la tienda NaviExpoNavidad.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#173d2d">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin">
+  <header class="admin-header">
+    <div class="container admin-header__row">
+      <p class="admin-header__title">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 6.5 22 15h-3.2l5.2 7h-3.4L26 29H6l5.4-7H8l5.2-7H10Z" fill="currentColor"/><path d="M16 1.5l1.2 2.6 2.8.3-2.1 1.9.6 2.8L16 7.7l-2.5 1.4.6-2.8-2.1-1.9 2.8-.3Z" fill="#c99a3d"/></svg>
+        <span>Panel de productos</span>
+      </p>
+      <a class="btn btn-outline-light btn-sm" href="index.html" target="_blank" rel="noopener">Ver tienda</a>
+    </div>
+  </header>
+
+  <main id="main" class="container admin-main">
+    <h1 class="visually-hidden">Administrar productos</h1>
+
+    <div id="admin-alerts" aria-live="polite"></div>
+
+    <section class="admin-card" aria-labelledby="folder-title">
+      <div class="admin-card__row">
+        <div>
+          <h2 id="folder-title" class="admin-card__title">Carpeta del sitio</h2>
+          <p class="admin-card__text" id="folder-status">Revisando…</p>
+        </div>
+        <div class="admin-card__actions" id="folder-actions"></div>
+      </div>
+    </section>
+
+    <div class="save-bar" id="save-bar" hidden>
+      <p id="save-bar-text">Tienes cambios sin guardar.</p>
+      <div class="save-bar__actions">
+        <button type="button" class="btn btn-outline btn-sm" id="discard-changes">Descartar</button>
+        <button type="button" class="btn btn-accent btn-sm" id="save-changes">Guardar cambios</button>
+      </div>
+    </div>
+
+    <section aria-labelledby="products-title">
+      <div class="admin-toolbar">
+        <h2 id="products-title">Productos <span class="admin-count" id="product-count"></span></h2>
+        <button type="button" class="btn btn-primary" id="new-product">+ Nuevo producto</button>
+      </div>
+
+      <div class="admin-filters">
+        <div class="field">
+          <label for="admin-search">Buscar</label>
+          <input id="admin-search" type="search" placeholder="Nombre del producto" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="admin-category">Categoría</label>
+          <select id="admin-category"></select>
+        </div>
+      </div>
+
+      <ul class="admin-list" id="admin-list"></ul>
+    </section>
+
+    <details class="admin-help">
+      <summary>¿Cómo funciona este panel?</summary>
+      <ol>
+        <li><strong>Conecta la carpeta del sitio</strong> (la que contiene <code>index.html</code>). Solo se hace una vez por navegador. Funciona en Chrome y Edge.</li>
+        <li><strong>Agrega o edita productos</strong> con el botón “Nuevo producto”. Puedes subir fotos desde tu computadora o celular; se optimizan automáticamente.</li>
+        <li><strong>Presiona “Guardar cambios”.</strong> El panel actualiza <code>js/products.js</code> y guarda las fotos en <code>img/productos/</code>.</li>
+        <li><strong>Recarga la tienda</strong> para ver los cambios. Si tu sitio está publicado (por ejemplo en Netlify), vuelve a subir la carpeta para que los cambios se vean en internet.</li>
+      </ol>
+      <p>Si usas otro navegador (Firefox o Safari), al guardar se descargará un archivo <code>products.js</code>: cópialo dentro de la carpeta <code>js/</code> del sitio, reemplazando el anterior. En ese caso las fotos quedan dentro del mismo archivo.</p>
+      <p>Los cambios que todavía no guardas se conservan en este navegador por si cierras la página por accidente.</p>
+    </details>
+  </main>
+
+  <dialog class="product-dialog" id="product-dialog" aria-labelledby="dialog-title">
+    <form id="product-form" novalidate>
+      <div class="product-dialog__head">
+        <h2 id="dialog-title">Nuevo producto</h2>
+        <button type="button" class="icon-btn" data-dialog-close aria-label="Cerrar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="product-dialog__body">
+        <p class="form-summary-error" id="form-error" role="alert" hidden></p>
+
+        <div class="form-grid">
+          <div class="field form-grid__full" data-field="name">
+            <label for="f-name">Nombre del producto *</label>
+            <input id="f-name" name="name" type="text" maxlength="120" required placeholder="Ej. Abeto Nórdico 2.10 m con luces LED" aria-describedby="f-name-error">
+            <p class="field__error" id="f-name-error" hidden></p>
+          </div>
+
+          <div class="field" data-field="category">
+            <label for="f-category">Categoría *</label>
+            <select id="f-category" name="category" required aria-describedby="f-category-error"></select>
+            <p class="field__error" id="f-category-error" hidden></p>
+          </div>
+
+          <div class="field" data-field="badge">
+            <label for="f-badge">Etiqueta</label>
+            <select id="f-badge" name="badge">
+              <option value="">Sin etiqueta</option>
+              <option value="nuevo">Nuevo</option>
+              <option value="mas-vendido">Más vendido</option>
+              <option value="edicion-limitada">Edición limitada</option>
+            </select>
+          </div>
+
+          <div class="field" data-field="price">
+            <label for="f-price">Precio *</label>
+            <input id="f-price" name="price" type="number" inputmode="decimal" min="0" step="0.01" required placeholder="Ej. 2499" aria-describedby="f-price-error">
+            <p class="field__error" id="f-price-error" hidden></p>
+          </div>
+
+          <div class="field" data-field="salePrice">
+            <label for="f-sale">Precio de oferta</label>
+            <input id="f-sale" name="salePrice" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Opcional" aria-describedby="f-sale-hint f-sale-error">
+            <p class="field__hint" id="f-sale-hint">Déjalo vacío si no está en oferta.</p>
+            <p class="field__error" id="f-sale-error" hidden></p>
+          </div>
+
+          <div class="field form-grid__full" data-field="description">
+            <label for="f-description">Descripción</label>
+            <textarea id="f-description" name="description" maxlength="1000" placeholder="Materiales, medidas, cómo se arma, para qué espacio es ideal…"></textarea>
+          </div>
+
+          <fieldset class="form-grid__full image-field">
+            <legend>Fotos</legend>
+            <p class="field__hint">La primera foto es la principal. Formatos JPG, PNG o WebP; se reducen y optimizan automáticamente. Máximo 6 fotos.</p>
+            <ul class="image-list" id="image-list"></ul>
+            <div class="image-actions">
+              <label class="btn btn-outline btn-sm" for="f-images" id="upload-label">Subir fotos</label>
+              <input id="f-images" type="file" accept="image/jpeg,image/png,image/webp" multiple class="visually-hidden">
+              <span class="field__hint" id="image-status" aria-live="polite"></span>
+            </div>
+            <div class="image-url">
+              <label class="visually-hidden" for="f-image-url">Ruta o enlace de imagen</label>
+              <input id="f-image-url" type="text" placeholder="O pega una ruta (img/productos/foto.webp) o un enlace https://">
+              <button type="button" class="btn btn-outline btn-sm" id="add-image-url">Agregar</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-grid__full attributes-field">
+            <legend>Características <span class="field__hint">(opcionales; ayudan a filtrar en la tienda)</span></legend>
+            <div class="form-grid">
+              <div class="field" data-attribute="altura">
+                <label for="f-altura">Altura</label>
+                <input id="f-altura" name="altura" type="text" list="list-altura" placeholder="Ej. 2.10 m">
+              </div>
+              <div class="field" data-attribute="forma">
+                <label for="f-forma">Forma</label>
+                <input id="f-forma" name="forma" type="text" list="list-forma" placeholder="Ej. Completo">
+              </div>
+              <div class="field" data-attribute="luz">
+                <label for="f-luz">Tipo de luz</label>
+                <input id="f-luz" name="luz" type="text" list="list-luz" placeholder="Ej. LED blanco cálido">
+              </div>
+              <div class="field" data-attribute="color">
+                <label for="f-color">Color</label>
+                <input id="f-color" name="color" type="text" list="list-color" placeholder="Ej. Dorado">
+              </div>
+              <div class="field" data-attribute="material">
+                <label for="f-material">Material</label>
+                <input id="f-material" name="material" type="text" list="list-material" placeholder="Ej. Vidrio">
+              </div>
+              <div class="field" data-attribute="piezas">
+                <label for="f-piezas">Piezas</label>
+                <input id="f-piezas" name="piezas" type="text" placeholder="Ej. 24">
+              </div>
+              <div class="field" data-attribute="medidas">
+                <label for="f-medidas">Medidas</label>
+                <input id="f-medidas" name="medidas" type="text" placeholder="Ej. 60 cm">
+              </div>
+            </div>
+          </fieldset>
+
+          <div class="form-grid__full toggles">
+            <label class="check"><input type="checkbox" name="available" checked> Disponible para venta</label>
+            <label class="check"><input type="checkbox" name="featured"> Mostrar en “Productos destacados” del inicio</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-dialog__foot">
+        <button type="button" class="btn btn-outline" data-dialog-close>Cancelar</button>
+        <button type="submit" class="btn btn-primary" id="form-submit">Guardar producto</button>
+      </div>
+    </form>
+  </dialog>
+
+  <datalist id="list-altura"></datalist>
+  <datalist id="list-forma"></datalist>
+  <datalist id="list-luz"></datalist>
+  <datalist id="list-color"></datalist>
+  <datalist id="list-material"></datalist>
+
+  <div class="toast" id="admin-toast" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>
+    <span data-toast-text></span>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

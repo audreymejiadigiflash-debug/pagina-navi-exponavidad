@@ -1,0 +1,308 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   NaviExpoNavidad — design tokens (refined European store: ivory, fir, antique gold)
+   ========================================================================== */
+@theme {
+  --color-ink: #1c1c1a;
+  --color-ink-soft: #57534c;
+  --color-ivory: #f8f5ef;
+  --color-linen: #efe9de;
+  --color-line: #e4ded3;
+  --color-line-strong: #c9c1b3;
+  --color-fir: #1f3b30;
+  --color-fir-deep: #13261e;
+  --color-gold: #a5844b;
+  --color-gold-ink: #7a5f30;
+  --color-claret: #8a2a28;
+  --color-success: #2f6b4a;
+  --color-error: #a3271f;
+
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-jost), "Jost", system-ui, sans-serif;
+  --font-logo: var(--font-montserrat), "Montserrat", system-ui, sans-serif;
+
+  --tracking-label: 0.16em;
+  --ease-elegant: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: var(--color-linen);
+  }
+}
+
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: 16px;
+  }
+
+  @media (min-width: 768px) {
+    .container-page {
+      padding-inline: 32px;
+    }
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-gold-ink);
+  }
+
+  .label-caps {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  .rule-gold {
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: var(--color-gold);
+  }
+
+  /* Buttons ---------------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 50px;
+    padding: 0 30px;
+    border: 1px solid transparent;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.2;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background-color 200ms var(--ease-elegant),
+      color 200ms var(--ease-elegant),
+      border-color 200ms var(--ease-elegant);
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .btn-sm {
+    min-height: 44px;
+    padding: 0 20px;
+    font-size: 0.75rem;
+  }
+
+  .btn-primary {
+    background: var(--color-fir);
+    color: #fff;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background: var(--color-fir-deep);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+
+  .btn-outline:hover:not(:disabled) {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  .btn-light {
+    background: #fff;
+    color: var(--color-ink);
+  }
+
+  .btn-light:hover:not(:disabled) {
+    background: var(--color-ivory);
+  }
+
+  .btn-ghost-light {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.7);
+    color: #fff;
+  }
+
+  .btn-ghost-light:hover:not(:disabled) {
+    background: #fff;
+    color: var(--color-ink);
+  }
+
+  .btn-danger {
+    background: transparent;
+    border-color: #d9b2ad;
+    color: var(--color-error);
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    background: #fbefed;
+  }
+
+  .link-underline {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+    text-decoration-color: var(--color-line-strong);
+    transition: text-decoration-color 200ms var(--ease-elegant);
+  }
+
+  .link-underline:hover {
+    text-decoration-color: currentColor;
+  }
+
+  /* Forms ------------------------------------------------------------------ */
+  .field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  .input {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 14px;
+    border: 1px solid var(--color-line-strong);
+    border-radius: 0;
+    background: #fff;
+    color: var(--color-ink);
+    font: inherit;
+    transition: border-color 150ms var(--ease-elegant);
+  }
+
+  .input:focus-visible {
+    outline: none;
+    border-color: var(--color-ink);
+    box-shadow: 0 0 0 1px var(--color-ink);
+  }
+
+  .input[aria-invalid="true"] {
+    border-color: var(--color-error);
+  }
+
+  textarea.input {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  select.input {
+    appearance: none;
+    padding-right: 40px;
+    background: #fff
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231c1c1a' stroke-width='1.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")
+      no-repeat right 14px center / 16px;
+  }
+
+  .field-hint {
+    margin-top: 6px;
+    font-size: 0.8125rem;
+    color: var(--color-ink-soft);
+  }
+
+  .field-error {
+    margin-top: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-error);
+  }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    accent-color: var(--color-fir);
+  }
+
+  /* Rich text for legal pages ---------------------------------------------- */
+  .prose-legal h2 {
+    margin: 2.5rem 0 0.75rem;
+    font-size: 1.75rem;
+  }
+
+  .prose-legal p,
+  .prose-legal li {
+    color: var(--color-ink-soft);
+  }
+
+  .prose-legal p {
+    margin-bottom: 1rem;
+  }
+
+  .prose-legal ul {
+    margin: 0 0 1rem 1.25rem;
+    list-style: disc;
+  }
+}
+
+/* Gentle entrance for content blocks; always ends visible. */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 600ms var(--ease-elegant) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
