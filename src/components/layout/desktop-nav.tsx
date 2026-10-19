@@ -4,17 +4,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import type { NavCategory } from "@/lib/navigation";
+import type { NavCategory, NavLink } from "@/lib/navigation";
+import { NavigationProgress } from "./navigation-progress";
+import { useMenuNavigation } from "./use-menu-navigation";
+
+const OPEN_DELAY_MS = 180;
+const CLOSE_DELAY_MS = 80;
 
 /*
- * Mega menu: opens on hover or keyboard focus. Closes on Escape, on pointer leave
- * and after navigating, so a panel never stays stuck open on the next page.
+ * Mega menu: opens on hover (with a short intent delay) or keyboard focus. Closes on
+ * Escape, pointer leave, scroll and as soon as a link is clicked, so a panel never
+ * lingers over the page the user just picked.
  */
 export function DesktopNav({ navigation }: { navigation: NavCategory[] }) {
   const pathname = usePathname();
   const [openId, setOpenId] = useState<string | null>(null);
   const [lastPathname, setLastPathname] = useState(pathname);
   const closeTimer = useRef<number | undefined>(undefined);
+  const openTimer = useRef<number | undefined>(undefined);
   const navRef = useRef<HTMLElement>(null);
 
   if (pathname !== lastPathname) {
@@ -33,17 +40,57 @@ export function DesktopNav({ navigation }: { navigation: NavCategory[] }) {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [openId]);
 
-  const open = (id: string) => {
+  useEffect(() => {
+    if (!openId) return;
+    const closeOnScroll = () => setOpenId(null);
+    window.addEventListener("scroll", closeOnScroll, { passive: true });
+    return () => window.removeEventListener("scroll", closeOnScroll);
+  }, [openId]);
+
+  useEffect(() => () => {
+    window.clearTimeout(openTimer.current);
     window.clearTimeout(closeTimer.current);
+  }, []);
+
+  const clearTimers = () => {
+    window.clearTimeout(openTimer.current);
+    window.clearTimeout(closeTimer.current);
+  };
+  const open = (id: string) => {
+    clearTimers();
     setOpenId(id);
   };
-  const scheduleClose = () => {
-    window.clearTimeout(closeTimer.current);
-    closeTimer.current = window.setTimeout(() => setOpenId(null), 120);
+  // Hover intent: a pointer just crossing the bar on its way to the page should not
+  // pop a panel. Once one is open, moving to a sibling switches immediately.
+  const openOnHover = (id: string) => {
+    clearTimers();
+    if (openId) {
+      setOpenId(id);
+      return;
+    }
+    openTimer.current = window.setTimeout(() => setOpenId(id), OPEN_DELAY_MS);
   };
+  const scheduleClose = () => {
+    clearTimers();
+    closeTimer.current = window.setTimeout(() => setOpenId(null), CLOSE_DELAY_MS);
+  };
+  const closeNow = () => {
+    clearTimers();
+    setOpenId(null);
+  };
+  // Close right away on selection instead of waiting for the next page to render.
+  const { isNavigating, handleClickCapture } = useMenuNavigation(closeNow);
 
   return (
-    <nav ref={navRef} aria-label="Categorías" className="hidden border-t border-line lg:block" onMouseLeave={scheduleClose}>
+    <nav
+      ref={navRef}
+      aria-label="Categorías"
+      aria-busy={isNavigating}
+      className="relative hidden border-t border-line lg:block"
+      onMouseLeave={scheduleClose}
+      onClickCapture={handleClickCapture}
+    >
+      <NavigationProgress active={isNavigating} />
       <ul className="container-page flex items-center justify-center gap-1">
         {navigation.map((item) => {
           const isOpen = openId === item.id;
@@ -51,7 +98,7 @@ export function DesktopNav({ navigation }: { navigation: NavCategory[] }) {
           return (
             <li
               key={item.id}
-              onMouseEnter={() => open(item.id)}
+              onMouseEnter={() => openOnHover(item.id)}
               onFocus={() => open(item.id)}
               onBlur={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget as Node | null)) scheduleClose();
@@ -76,12 +123,18 @@ export function DesktopNav({ navigation }: { navigation: NavCategory[] }) {
                       <ul className="space-y-2.5">
                         {column.links.map((link) => (
                           <li key={link.href}>
-                            <Link href={link.href} className="text-[0.95rem] text-ink hover:underline hover:underline-offset-4">
-                              {link.label}
-                            </Link>
+                            <MenuLink link={link} />
                           </li>
                         ))}
                       </ul>
+                      {column.more ? (
+                        <Link
+                          href={column.more.href}
+                          className="label-caps mt-4 inline-block text-[0.6875rem] text-ink-soft underline underline-offset-4 hover:text-ink"
+                        >
+                          {column.more.label}
+                        </Link>
+                      ) : null}
                     </div>
                   ))}
                   {Array.from({ length: Math.max(0, 3 - item.columns.length) }, (_, index) => (
@@ -103,7 +156,7 @@ export function DesktopNav({ navigation }: { navigation: NavCategory[] }) {
                       <span className="font-serif text-2xl text-ink">{item.label}</span>
                       <span className="mt-2 text-sm text-ink-soft">{item.description}</span>
                       <span className="label-caps mt-4 text-[0.6875rem] text-ink underline underline-offset-4">
-                        Descubrir
+                        {item.productCount === 1 ? "Ver la pieza" : `Ver las ${item.productCount} piezas`}
                       </span>
                     </span>
                   </Link>
@@ -122,5 +175,19 @@ export function DesktopNav({ navigation }: { navigation: NavCategory[] }) {
         </li>
       </ul>
     </nav>
+  );
+}
+
+function MenuLink({ link }: { link: NavLink }) {
+  return (
+    <Link href={link.href} className="group/link inline-flex items-baseline gap-2 text-[0.95rem] text-ink no-underline">
+      <span className="group-hover/link:underline group-hover/link:underline-offset-4">{link.label}</span>
+      {link.count !== undefined ? (
+        <span className="text-[0.8125rem] text-ink-soft">
+          ({link.count}
+          <span className="sr-only">{link.count === 1 ? " pieza" : " piezas"}</span>)
+        </span>
+      ) : null}
+    </Link>
   );
 }

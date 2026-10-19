@@ -13,9 +13,11 @@ import {
   type RawSearchParams,
 } from "@/lib/catalog-query";
 import { ATTRIBUTE_LABELS, FILTERABLE_ATTRIBUTES } from "@/lib/constants";
-import { categoryHref } from "@/lib/navigation";
+import { FILTERS_ANCHOR, categoryHref } from "@/lib/navigation";
 import type { Category } from "@/lib/types";
+import { ActiveFilters } from "./active-filters";
 import { CatalogFilters, SortSelect, type FilterGroup } from "./catalog-filters";
+import { ScrollToHash } from "./scroll-to-hash";
 
 type CatalogViewProps = {
   /** null for the whole store; an unknown id renders the 404 page. */
@@ -44,6 +46,7 @@ export async function CatalogView({ categoryId, searchParams }: CatalogViewProps
   const base = baseProducts(products, categories, query);
   const results = sortProducts(applyFilters(base, query), query.sort);
   const { title, description } = headingFor(category, query.search, query.onlySale);
+  const pathname = category ? categoryHref(category.id) : "/tienda";
 
   const groups: FilterGroup[] = FILTERABLE_ATTRIBUTES.map((key) => ({
     key,
@@ -84,37 +87,15 @@ export async function CatalogView({ categoryId, searchParams }: CatalogViewProps
           </nav>
           <h1 className="text-[2.75rem] md:text-[3.75rem]">{title}</h1>
           <p className="mx-auto mt-4 max-w-[60ch] text-ink-soft">{description}</p>
-          <nav aria-label="Categorías" className="mt-8">
-            <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-              <li>
-                <Link
-                  href="/tienda"
-                  aria-current={!category ? "page" : undefined}
-                  className={`label-caps inline-flex min-h-10 items-center border-b text-[0.6875rem] ${!category ? "border-ink text-ink" : "border-transparent text-ink-soft hover:text-ink"}`}
-                >
-                  Todo
-                </Link>
-              </li>
-              {categories.map((item) => {
-                const current = item.id === category?.id;
-                return (
-                  <li key={item.id}>
-                    <Link
-                      href={categoryHref(item.id)}
-                      aria-current={current ? "page" : undefined}
-                      className={`label-caps inline-flex min-h-10 items-center border-b text-[0.6875rem] ${current ? "border-ink text-ink" : "border-transparent text-ink-soft hover:text-ink"}`}
-                    >
-                      {item.shortName}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
         </div>
       </section>
 
-      <div className="container-page grid gap-10 py-10 lg:grid-cols-[240px_1fr] lg:py-14">
+      {/* Scroll margin clears the sticky header when the menu links to the filters. */}
+      <div
+        id={FILTERS_ANCHOR}
+        className="container-page grid scroll-mt-36 gap-10 py-10 lg:scroll-mt-40 lg:grid-cols-[240px_1fr] lg:py-14"
+      >
+        <ScrollToHash id={FILTERS_ANCHOR} />
         <CatalogFilters groups={groups} resultCount={results.length} />
         <section aria-label="Productos" className="min-w-0">
           <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-4">
@@ -123,6 +104,7 @@ export async function CatalogView({ categoryId, searchParams }: CatalogViewProps
             </p>
             <SortSelect options={SORT_OPTIONS} value={query.sort} />
           </div>
+          <ActiveFilters pathname={pathname} params={params} query={query} />
 
           {results.length ? (
             <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 lg:gap-x-6">

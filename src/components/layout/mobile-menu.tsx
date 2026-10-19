@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDownIcon, CloseIcon, MenuIcon } from "@/components/icons";
 import type { NavCategory } from "@/lib/navigation";
+import { NavigationProgress } from "./navigation-progress";
+import { useMenuNavigation } from "./use-menu-navigation";
 
 export function MobileMenu({ navigation }: { navigation: NavCategory[] }) {
   const [open, setOpen] = useState(false);
@@ -12,6 +14,9 @@ export function MobileMenu({ navigation }: { navigation: NavCategory[] }) {
   const pathname = usePathname();
   const [lastPathname, setLastPathname] = useState(pathname);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  // Filter links keep the same pathname (only ?color=… changes), so closing on route
+  // change alone would leave the drawer covering the results.
+  const { isNavigating, handleClickCapture } = useMenuNavigation(() => setOpen(false));
 
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
@@ -28,6 +33,7 @@ export function MobileMenu({ navigation }: { navigation: NavCategory[] }) {
 
   return (
     <>
+      <NavigationProgress active={isNavigating} className="fixed inset-x-0 top-0 lg:hidden" />
       <button
         type="button"
         className="inline-flex min-h-11 min-w-11 items-center justify-center text-ink lg:hidden"
@@ -60,7 +66,7 @@ export function MobileMenu({ navigation }: { navigation: NavCategory[] }) {
               <CloseIcon size={22} />
             </button>
           </div>
-          <nav aria-label="Categorías" className="flex-1 overflow-y-auto px-5 py-2">
+          <nav aria-label="Categorías" className="flex-1 overflow-y-auto px-5 py-2" onClickCapture={handleClickCapture}>
             <ul>
               {navigation.map((item) => {
                 const isExpanded = expanded === item.id;
@@ -88,12 +94,23 @@ export function MobileMenu({ navigation }: { navigation: NavCategory[] }) {
                           <ul>
                             {column.links.map((link) => (
                               <li key={link.href}>
-                                <Link href={link.href} className="flex min-h-10 items-center text-[0.95rem] text-ink-soft">
+                                <Link href={link.href} className="flex min-h-10 items-center gap-2 text-[0.95rem] text-ink-soft">
                                   {link.label}
+                                  {link.count !== undefined ? (
+                                    <span className="text-[0.8125rem]">
+                                      ({link.count}
+                                      <span className="sr-only">{link.count === 1 ? " pieza" : " piezas"}</span>)
+                                    </span>
+                                  ) : null}
                                 </Link>
                               </li>
                             ))}
                           </ul>
+                          {column.more ? (
+                            <Link href={column.more.href} className="flex min-h-10 items-center text-[0.875rem] text-ink underline underline-offset-4">
+                              {column.more.label}
+                            </Link>
+                          ) : null}
                         </div>
                       ))}
                     </div>
