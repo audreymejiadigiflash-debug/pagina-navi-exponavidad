@@ -12,8 +12,9 @@ function read(name: string): string {
 export const env = {
   siteUrl: (read("NEXT_PUBLIC_SITE_URL") || "http://localhost:3000").replace(/\/+$/, ""),
   supabaseUrl: read("NEXT_PUBLIC_SUPABASE_URL"),
-  supabaseAnonKey: read("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
-  supabaseServiceRoleKey: read("SUPABASE_SERVICE_ROLE_KEY"),
+  // Supabase renamed its keys (anon → publishable, service_role → secret); accept both.
+  supabaseAnonKey: read("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY") || read("NEXT_PUBLIC_SUPABASE_ANON_KEY"),
+  supabaseServiceRoleKey: read("SUPABASE_SECRET_KEY") || read("SUPABASE_SERVICE_ROLE_KEY"),
   mercadoPagoAccessToken: read("MERCADOPAGO_ACCESS_TOKEN"),
   mercadoPagoWebhookSecret: read("MERCADOPAGO_WEBHOOK_SECRET"),
   adminEmails: read("ADMIN_EMAILS")
