@@ -468,6 +468,21 @@ const demoProductInputs: DemoProductInput[] = [
     createdAt: "2026-10-22",
   },
   {
+    slug: "adorno-pinas-plateado",
+    name: "Adorno Piñas Navideñas Plateado, 4 piezas",
+    categoryId: "adornos",
+    description:
+      "Paquete de 4 adornos en forma de piña de pino en plateado brillante con destellos dorados entre las escamas, que imitan una piña natural cubierta de escarcha. Cada piña trae su casquillo dorado listo para colgar. Son un clásico de la decoración navideña que le da a tu árbol un toque natural y elegante; lucen perfectas en árboles verdes o nevados, en coronas y guirnaldas, y combinan con esferas plateadas, doradas o Mix Gold.",
+    priceCents: 6700,
+    salePriceCents: null,
+    stock: 10,
+    images: ["/images/productos/adorno-pinas-plateado-portada.webp", "/images/productos/adorno-pinas-plateado-1.webp"],
+    badge: "nuevo",
+    featured: true,
+    attributes: { color: "Plateado", piezas: "4" },
+    createdAt: "2026-10-22",
+  },
+  {
     slug: "adorno-pretzel",
     name: "Adorno Pretzel",
     categoryId: "adornos",
