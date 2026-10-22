@@ -413,6 +413,21 @@ const demoProductInputs: DemoProductInput[] = [
   candyOrnament("dorado", "Dorado", "dorado metálico"),
   candyOrnament("rojo", "Rojo", "rojo metálico"),
   {
+    slug: "adorno-galleta-jengibre",
+    name: "Adorno Galleta de Jengibre, 4 piezas",
+    categoryId: "adornos",
+    description:
+      "Paquete de 4 adornos en forma de galleta de jengibre, el clásico hombrecito navideño: cuerpo en dorado y caramelo metálico de alto brillo, carita sonriente, botones y moñito en rojo con glitter, y un gorro de Santa en rojo escarchado con borde blanco. Cada uno trae su casquillo dorado listo para colgar. Le dan a tu árbol un toque divertido y tierno, perfecto para una decoración temática de dulces junto al Adorno Pretzel, la Dona y las esferas de caramelo.",
+    priceCents: 10000,
+    salePriceCents: null,
+    stock: 10,
+    images: ["/images/productos/adorno-galleta-jengibre-portada.webp"],
+    badge: "nuevo",
+    featured: true,
+    attributes: { color: "Dorado", piezas: "4" },
+    createdAt: "2026-10-22",
+  },
+  {
     slug: "adorno-pretzel",
     name: "Adorno Pretzel",
     categoryId: "adornos",
