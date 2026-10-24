@@ -1,5 +1,6 @@
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 import { getCategories, getPublishedProducts, getStoreSettings } from "@/lib/catalog";
 import { formatPrice } from "@/lib/format";
 import { buildNavigation } from "@/lib/navigation";
@@ -30,6 +31,7 @@ export default async function StoreLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <SiteFooter navigation={navigation} settings={settings} year={year} />
+      <WhatsAppButton />
     </>
   );
 }

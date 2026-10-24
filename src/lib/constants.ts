@@ -7,6 +7,9 @@ export const MAX_QUANTITY_PER_ITEM = 20;
 export const MAX_PRODUCT_IMAGES = 6;
 export const MAX_PRODUCT_VARIANTS = 12;
 export const PRODUCT_IMAGES_BUCKET = "product-images";
+/** Store WhatsApp in international format (52 = Mexico), as wa.me expects. */
+export const WHATSAPP_NUMBER = "525518441321";
+export const WHATSAPP_GREETING = "Hola, vengo de la tienda en línea de NaviExpoNavidad y tengo una pregunta.";
 
 export const ATTRIBUTE_LABELS: Record<AttributeKey, string> = {
   altura: "Altura",
